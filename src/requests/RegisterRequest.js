@@ -2,14 +2,15 @@ import axios from 'axios'
 
 export default class LoginRequest {
     
-    constructor(login, password, name) {
+    constructor(login, password, name, ids) {
         this.login = login
         this.password = password
         this.name = name
-        this.baseUrl = `${window.config.API_URL}/register` 
+        this.ids = ids
+        this.baseUrl = `${window.config.API_URL}/alunos` 
     }
     
     send() {
-        return axios.post(this.baseUrl, { login: this.login, password: this.password, name: this.name })
+        return axios.post(this.baseUrl, { matricula: this.login, senha: this.password, nome: this.name, ids: this.ids })
     }
 }

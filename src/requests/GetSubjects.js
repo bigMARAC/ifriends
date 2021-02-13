@@ -4,12 +4,12 @@ export default class GetSubjectsRequest {
     
     constructor(token) {
         this.token = token
-        this.baseUrl = `${window.config.API_URL}/subject/all` 
+        this.baseUrl = `${window.config.API_URL}/materias` 
     }
     
     send() {
         const headers = {
-            'token': this.token
+            'authorization': 'Bearer ' + this.token
         }
 
         return axios.get(

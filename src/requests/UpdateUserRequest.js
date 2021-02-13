@@ -5,12 +5,12 @@ export default class UpdateUSerRequest {
     constructor(token, data) {
         this.token = token
         this.data = data
-        this.baseUrl = `${window.config.API_URL}/me` 
+        this.baseUrl = `${window.config.API_URL}/alunos` 
     }
     
     send() {
         const headers = {
-            'token': this.token
+            'authorization': 'Bearer ' + this.token
         }
         
         return axios.put(

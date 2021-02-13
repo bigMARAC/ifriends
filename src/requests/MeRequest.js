@@ -9,7 +9,7 @@ export default class MeRequest {
     
     send() {
         const headers = {
-            'token': this.token
+            'authorization': 'Bearer ' + this.token
         }
 
         return axios.get(
