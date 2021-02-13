@@ -95,14 +95,15 @@ export default Vue.extend({
           )
           const loginResponse = await loginRequest.send()
 
-          this.$store.dispatch("triggerSetToken", loginResponse.data.accessToken)
+          this.$store.dispatch("triggerSetToken", loginResponse.data.token)
           
           const meRequest = new MeRequest(this.$store.state.user.token)
           const meResponse = await meRequest.send()
 
-          this.$store.dispatch("triggerSetUser", meResponse.data)
+          this.$store.dispatch("triggerSetUser", meResponse.data.aluno)
 
           await this.$store.dispatch("loadSubjects", this.$store.state.user.token)
+          await this.$store.dispatch("loadUsers", this.$store.state.user.token)
 
           this.$store.commit("saveUser")
           this.$router.push("/explore")
@@ -111,7 +112,7 @@ export default Vue.extend({
           this.error = true
         }
       } catch (error) {
-        this.errorMessage = error.response.data.message
+        this.errorMessage = error.response.data.erro
         this.error = true
         this.loading = false
       }

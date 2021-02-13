@@ -1,8 +1,9 @@
 <template>
-  <v-card class="mx-auto my-3" max-width="400">
+<v-container>
+<v-card v-for="user in $store.state.user.users" :key="user.id" class="mx-auto my-3" max-width="400">
     <v-img height="250" :src="`${p[i].img}`"></v-img>
 
-    <v-card-title>{{ p[i].nome }}</v-card-title>
+    <v-card-title>{{ user.nome }}</v-card-title>
 
     <v-card-text>
       <v-row align="center" class="mx-0">
@@ -15,14 +16,8 @@
     <v-divider class="mx-4"></v-divider>
 
     <v-card-text class="text-center">
-      <v-chip class="ma-2" color="#FB4836" text-color="white" label>
-        Matemática
-      </v-chip>
-      <v-chip class="ma-2" color="#33A1FF" text-color="white" label>
-        Física
-      </v-chip>
-      <v-chip class="ma-2" color="#45864A" text-color="white" label>
-        Biologia
+      <v-chip v-for="materia in user.materias" :key="materia.id" class="ma-2" color="primary" text-color="white" label>
+        {{ materia.nome }}
       </v-chip>
     </v-card-text>
 
@@ -40,12 +35,9 @@
         </v-col>
       </v-row>
     </v-card-actions>
-    <v-footer padless class="mt-7">
-      <v-col class="text-center" cols="12">
-        {{ new Date().getFullYear() }} — <strong>MaracTech</strong>
-      </v-col>
-    </v-footer>
   </v-card>
+</v-container>
+  
 </template>
 
 <script>

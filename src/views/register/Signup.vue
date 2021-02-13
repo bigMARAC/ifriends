@@ -3,11 +3,6 @@
     <v-col cols="12" md="3" lg="3" align="center">
       <Logo />
       <RegisterForm />
-      <v-footer padless class="mt-7">
-        <v-col class="text-center" cols="12">
-          {{ new Date().getFullYear() }} — <strong>MaracTech</strong>
-        </v-col>
-      </v-footer>
     </v-col>
   </v-row>
 </template>
