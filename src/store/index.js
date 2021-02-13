@@ -1,4 +1,5 @@
 import GetSubjects from './../requests/GetSubjects.js'
+import GetUsers from './../requests/GetUsers'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -8,7 +9,8 @@ export default new Vuex.Store({
   state: {
     user: {
       token: undefined,
-      subjects: []
+      subjects: [],
+      users: []
     },
   },
   mutations: {
@@ -20,6 +22,9 @@ export default new Vuex.Store({
     },
     setSubjects(state, subjects) {
       state.user.subjects = subjects
+    },
+    setUsers(state, users) {
+      state.user.users = users
     },
     saveUser(state) {
       localStorage.setItem('user', JSON.stringify(state.user))
@@ -45,8 +50,17 @@ export default new Vuex.Store({
       try {
         const request = new GetSubjects(token)
         const response = await request.send()
-        console.log(response.data.data)
-        context.commit('setSubjects', response.data.data)
+        context.commit('setSubjects', response.data.materias)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async loadUsers(context, token){
+      try {
+        const request = new GetUsers(token)
+        const response = await request.send()
+        console.log(response.data.alunos)
+        context.commit('setUsers', response.data.alunos)
       } catch (error) {
         console.log(error)
       }
