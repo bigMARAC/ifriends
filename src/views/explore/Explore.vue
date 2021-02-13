@@ -1,52 +1,63 @@
 <template>
-<v-container>
-<v-card v-for="user in $store.state.user.users" :key="user.id" class="mx-auto my-3" max-width="400">
-    <v-img height="250" :src="`${p[i].img}`"></v-img>
+  <v-container>
+    <v-card
+      class="mx-auto my-3"
+      max-width="400"
+    >
+      <v-img height="250" :src="`${p[0].img}`"></v-img>
 
-    <v-card-title>{{ user.nome }}</v-card-title>
+      <v-card-title>{{ $store.state.user.users[i].nome }}</v-card-title>
 
-    <v-card-text>
-      <v-row align="center" class="mx-0">
-        <div class="grey--text">{{ p[i].turma }}</div>
-      </v-row>
+      <v-card-text>
+        <v-row align="center" class="mx-0">
+          <div class="grey--text">{{ p[0].turma }}</div>
+        </v-row>
 
-      <div class="mt-5">{{ p[i].bio }}</div>
-    </v-card-text>
+        <div class="mt-5">{{ p[0].bio }}</div>
+      </v-card-text>
 
-    <v-divider class="mx-4"></v-divider>
+      <v-divider class="mx-4"></v-divider>
 
-    <v-card-text class="text-center">
-      <v-chip v-for="materia in user.materias" :key="materia.id" class="ma-2" color="primary" text-color="white" label>
-        {{ materia.nome }}
-      </v-chip>
-    </v-card-text>
+      <v-card-text class="text-center">
+        <v-chip
+          v-for="materia in $store.state.user.users[i].materias"
+          :key="materia.id"
+          class="ma-2"
+          color="primary"
+          text-color="white"
+          label
+        >
+          {{ materia.nome }}
+        </v-chip>
+      </v-card-text>
 
-    <v-card-actions class="px-5">
-      <v-row class="my-2 justify-center">
-        <v-col cols="3">
-          <v-btn large v-on:click="i++" elevation="5">
-            <v-icon color="primary">mdi-thumb-down</v-icon></v-btn
-          >
-        </v-col>
-        <v-col cols="3">
-          <v-btn @click="match" v-on:click="i++" large elevation="5">
-            <v-icon color="primary">mdi-thumb-up</v-icon></v-btn
-          >
-        </v-col>
-      </v-row>
-    </v-card-actions>
-  </v-card>
-</v-container>
-  
+      <v-card-actions class="px-5">
+        <v-row class="my-2 justify-center">
+          <v-col cols="3">
+            <v-btn large v-on:click="i++" elevation="5">
+              <v-icon color="error">mdi-thumb-down</v-icon></v-btn
+            >
+          </v-col>
+          <v-col cols="3">
+            <v-btn @click="match($store.state.user.users[i].id)" large elevation="5">
+              <v-icon color="success">mdi-thumb-up</v-icon></v-btn
+            >
+          </v-col>
+        </v-row>
+      </v-card-actions>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
 import Vue from "vue";
+import MatchRequest from "./../../requests/MatchRequest"
 
 export default Vue.extend({
   data() {
     return {
       i: 0,
+
       p: [
         {
           nome: "WhatsApp Junior",
@@ -54,28 +65,26 @@ export default Vue.extend({
           bio:
             "whatsapp junior 🙏🏻 whatsapp junior 🙏🏻 whatsapp junior 🙏🏻 whatsapp junior 🙏🏻 ",
           img: "https://i.redd.it/2t96qnhl65p51.jpg",
-        },
-        {
-          nome: "Pedro",
-          turma: "THA18",
-          bio:
-            "Bom dia Pedro Bom dia Pedro Bom dia Pedro Bom dia Pedro Bom dia Pedro",
-          img:
-            "https://cdn.folhape.com.br/img/pc/450/450/dn_arquivo/2020/01/pedro-1-1.jpg",
-        },
-        {
-          nome: "Julio Santini Bianco",
-          turma: "IA18",
-          bio:
-            "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum ",
-          img:
-            "https://cdn.folhape.com.br/img/pc/1100/1/dn_arquivo/2020/08/whatsapp-image-2020-08-27-at-143843.jpeg",
-        },
+        }
       ],
     };
   },
   methods: {
-    match() {},
+    async match(destino_id) {
+      this.i++
+      const origem_id = this.$store.state.user.id
+      const token = this.$store.state.user.token
+
+      console.log(token, origem_id, destino_id)
+
+      const request = new MatchRequest(token, origem_id, destino_id)
+
+      const response = await request.send()
+
+      if(response.match){
+        alert("UM MATCH OMG")
+      }
+    },
   },
 });
 </script>
