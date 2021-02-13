@@ -37,12 +37,27 @@
       prepend-icon="mdi-lock"
       :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="passwordConfirmRules"
-      :type="passwordConfirmShow ? 'text' : 'password'"
+      :type="passwordShow ? 'text' : 'password'"
       name="Password Input 02"
       label="Repita sua Senha"
       @click:append="passwordShow = !passwordShow"
     ></v-text-field>
     <v-row>
+      <v-col cols="12">
+        <p class="font-weight-medium text-left">
+          Escolha 3 matérias do seu interesse:
+        </p>
+        <v-chip-group active-class="primary" multiple>
+          <v-chip
+            v-for="subject in $store.state.user.subjects"
+            :key="subject.nome"
+            label
+            @click="select(subject)"
+          >
+            {{ subject.nome }}</v-chip
+          >
+        </v-chip-group>
+      </v-col>
       <v-col cols="12">
         <v-btn @click="register" block color="primary" class="my-3">
           <span v-if="!loading"> Registrar </span>
@@ -80,12 +95,15 @@ export default Vue.extend({
       valid: false,
       loading: false,
       error: false,
+      errorMessage: "Erro",
       userData: {
         login: "",
         password: "",
         passwordConfirm: "",
         name: "",
       },
+      ids: [],
+      materias: {},
       loginRules: [
         (login) => !!login || "A matrícula é um campo obrigatório",
         (login) => login.length == 10 || "A matrícula possui 10 caracteres",
@@ -103,7 +121,24 @@ export default Vue.extend({
       nameRules: [(name) => !!name || "Nome é um campo obrigatório"],
     };
   },
+  async mounted() {
+    await this.$store.dispatch("loadSubjects", this.$store.state.user.token);
+
+    this.materias = this.$store.state.user.subjects;
+  },
   methods: {
+    select(subject) {
+      let ocurrences = this.ids.find((el) => el.id == subject.id);
+      if (ocurrences !== undefined) {
+        this.ids = this.ids.filter(
+          (el) => el.id != subject.id
+        );
+      } else {
+        this.ids.push(subject);
+      }
+      const ids = this.ids.map((el) => el.id);
+      console.log(ids);
+    },
     async register() {
       try {
         if (
@@ -112,30 +147,38 @@ export default Vue.extend({
         ) {
           this.loading = true;
 
+          const ids = this.ids.map((el) => el.id);
+
           const registerRequest = new RegisterRequest(
             this.userData.login,
             this.userData.password,
-            this.userData.name
+            this.userData.name,
+            ids
           );
 
           const registerResponse = await registerRequest.send();
 
           this.$store.dispatch(
             "triggerSetToken",
-            registerResponse.data.accessToken
+            registerResponse.data.aluno.token
           );
 
           const meRequest = new MeRequest(this.$store.state.user.token);
           const meResponse = await meRequest.send();
 
-          this.$store.dispatch("triggerSetUser", meResponse.data);
+          this.$store.dispatch("triggerSetUser", meResponse.data.aluno);
+
+          await this.$store.dispatch("loadSubjects", this.$store.state.user.token)
+          await this.$store.dispatch("loadUsers", this.$store.state.user.token)
+
+          this.$store.commit("saveUser")
           this.$router.push("/explore");
         } else {
           this.errorMessage = "Campos inválidos.";
           this.error = true;
         }
       } catch (error) {
-        this.errorMessage = error.response.data.message;
+        this.errorMessage = error.response.data.erro;
         this.error = true;
         this.loading = false;
       }
