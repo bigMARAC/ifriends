@@ -59,7 +59,6 @@ export default new Vuex.Store({
       try {
         const request = new GetUsers(token)
         const response = await request.send()
-        console.log(response.data.alunos)
         context.commit('setUsers', response.data.alunos)
       } catch (error) {
         console.log(error)
