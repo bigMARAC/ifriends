@@ -2,6 +2,7 @@ import Explore from '../views/explore/Explore.vue'
 import Login from '../views/login/Login.vue'
 import Profile from '../views/profile/Profile.vue'
 import Signup from '../views/register/Signup.vue'
+import Match from '../views/match/Match.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store/index.js'
@@ -29,6 +30,11 @@ const routes = [
     name: 'Profile',
     component: Profile
   },
+  {
+    path: '/match',
+    name: 'Match',
+    component: Match
+  }
 ]
 
 const router = new VueRouter({

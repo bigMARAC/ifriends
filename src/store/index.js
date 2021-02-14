@@ -1,5 +1,6 @@
 import GetSubjects from './../requests/GetSubjects.js'
 import GetUsers from './../requests/GetUsers'
+import GetMatchs from "./../requests/GetMatchs"
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -8,6 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: {
+      id: undefined,
       token: undefined,
       subjects: [],
       users: []
@@ -25,6 +27,9 @@ export default new Vuex.Store({
     },
     setUsers(state, users) {
       state.user.users = users
+    },
+    setMatchs(state, matchs){
+      state.user.matchs = matchs
     },
     saveUser(state) {
       localStorage.setItem('user', JSON.stringify(state.user))
@@ -45,6 +50,16 @@ export default new Vuex.Store({
     },
     triggerSetUser(context, user) {
       context.commit('setUser', user)
+    },
+    async loadMatchs(context, token){
+      try {
+        const request = new GetMatchs(token)
+        const response = await request.send()
+        console.log(response)
+        context.commit('setMatchs', response.data)
+      } catch (error) {
+        console.log(error)
+      }
     },
     async loadSubjects(context, token) {
       try {
