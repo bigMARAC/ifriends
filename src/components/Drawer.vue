@@ -37,9 +37,9 @@ export default Vue.extend({
     return {
       drawer: false,
       items: [
+        { icon: "mdi-book-open-page-variant", title: "Combinações", callback: () => this.open("/match") },
         { icon: "mdi-compass", title: "Explore", callback: () => this.open("/explore") },
         { icon: "mdi-account", title: "Perfil", callback: () => this.open("/profile") },
-        { icon: "mdi-cog", title: "Configurações", callback: () => this.open("/profile") },
         { icon: "mdi-logout", title: "Sair", callback: () => this.logout() },
       ]
     }
