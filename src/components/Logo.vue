@@ -1,5 +1,5 @@
 <template>
-  <v-img class="my-5" width="180" src="../assets/logo.svg"></v-img>
+  <v-img width="250" src="../assets/logo.png"></v-img>
 </template>
 
 <script>
