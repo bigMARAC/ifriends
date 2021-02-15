@@ -55,7 +55,6 @@ export default new Vuex.Store({
       try {
         const request = new GetMatchs(token)
         const response = await request.send()
-        console.log(response)
         context.commit('setMatchs', response.data)
       } catch (error) {
         console.log(error)
