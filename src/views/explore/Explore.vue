@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card class="mx-auto" max-width="400" v-if="$store.state.user.users.length > 0">
-      <v-img height="250" :src="`${p[0].img}`"></v-img>
+      <v-img height="300" :src="setProfilePicture()"></v-img>
 
       <v-card-title>{{ $store.state.user.users[userIndex].nome }}</v-card-title>
 
@@ -52,11 +52,11 @@
       </v-card-actions>
     </v-card>
 
-    <v-card class="mx-auto px-4" max-width="400" color="primary" v-else>
-      <v-card-title>Está vazio aqui...</v-card-title>
+    <v-card class="mx-auto px-4" max-width="400" v-else>
+      <v-card-title>🙁 Está vazio aqui...</v-card-title>
       <v-card-text>
         <v-row>
-          <div class="my-3">Aproveite suas combinações no Menu</div>
+          <div class="my-3">Aproveite suas combinações em "Combinações" no Menu ou volte mais tarde</div>
         </v-row>
       </v-card-text>
     </v-card>
@@ -90,6 +90,10 @@ export default Vue.extend({
     this.load(false);
   },
   methods: {
+    setProfilePicture(){
+      const url = `http://localhost:777/uploads/${this.$store.state.user.users[this.userIndex].foto}`
+      return url ?? "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
+    },
     nextUser() {
       this.overlays.match = false
 
@@ -128,6 +132,8 @@ export default Vue.extend({
 
       if(data){
         this.userIndex--
+        await this.$store.dispatch("loadMatchs", this.$store.state.user.token);
+        this.$store.commit("saveUser");
       }
       console.log('userIndex: ' + this.userIndex + ', Users Length: ' + this.$store.state.user.users.length)
 

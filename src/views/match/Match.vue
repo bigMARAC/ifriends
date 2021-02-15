@@ -9,12 +9,12 @@
         <v-list-item v-for="match in $store.state.user.matchs" :key="match.id">
           <template>
             <v-list-item-icon>
-              <v-icon>mdi-face</v-icon>
+              <v-img :src="setProfilePicture(match.foto)" max-width="40" max-height="40" class="rounded-circle"></v-img>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title v-text="match.nome"></v-list-item-title>
             </v-list-item-content>
-            <v-list-action>
+            <div>
               <v-btn
                 class="mr-3"
                 fab
@@ -27,18 +27,12 @@
               <v-btn
                 fab
                 small
-                :href="`https://api.whatsapp.com/send?phone=${match.phone}&text=B%C3%B3%20comer%20um%20cu`"
+                :href="`https://api.whatsapp.com/send?phone=${match.phone}&text=Ol%C3%A1%2C+n%C3%B3s+combinamos+no+IFriends%21`"
                 target="_blank"
               >
                 <v-icon color="success">mdi-whatsapp</v-icon>
               </v-btn>
-            </v-list-action>
-            <!-- <div class="text-center">
-              <v-btn class="mx-5" fab color="#ff68be" small elevation="2">
-              </v-btn>
-              <v-btn fab color="success" small elevation="2">
-              </v-btn>
-            </div> -->
+            </div>
           </template>
         </v-list-item>
       </v-list-item-group>
@@ -52,18 +46,7 @@ import Vue from "vue";
 export default Vue.extend({
   data() {
     return {
-      matchs: [
-        {
-          id: 1,
-          nome: "Testando",
-          instagram: null,
-        },
-        {
-          id: 2,
-          nome: "testando 02",
-          instagram: "bigmarac",
-        },
-      ],
+      //
     };
   },
 
@@ -72,11 +55,13 @@ export default Vue.extend({
   },
 
   methods: {
+    setProfilePicture(foto) {
+      console.log(foto)
+      return foto ? `http://localhost:777/uploads/${foto}` : "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
+    },
     async loadMatchs() {
       await this.$store.dispatch("loadMatchs", this.$store.state.user.token);
       this.$store.commit("saveUser");
-
-      console.log(this.$store.state.user.token);
     },
   },
 });
