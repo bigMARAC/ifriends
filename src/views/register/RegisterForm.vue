@@ -1,16 +1,6 @@
 <template>
   <v-form ref="login_form" v-model="valid">
     <v-text-field
-      class="my-2"
-      prepend-icon="mdi-account"
-      v-model="userData.login"
-      label="Matrícula"
-      :rules="loginRules"
-      required
-      clearable
-      :counter="10"
-    ></v-text-field>
-    <v-text-field
       v-model="userData.name"
       class="my-2"
       prepend-icon="mdi-account-box"
@@ -19,6 +9,57 @@
       required
       clearable
     ></v-text-field>
+
+    <v-text-field
+      class="my-2"
+      prepend-icon="mdi-id-card"
+      v-model="userData.login"
+      label="Matrícula"
+      :rules="loginRules"
+      required
+      clearable
+      :counter="10"
+    ></v-text-field>
+
+    <v-select
+      class="my-2"
+      prepend-icon="mdi-book"
+      v-model="selectTurma"
+      :items="turmas"
+      :rules="[(v) => !!v || 'Turma é um campo obrigatório']"
+      label="Turma"
+      required
+    ></v-select>
+
+    <v-text-field
+      class="my-2"
+      prepend-icon="mdi-instagram"
+      v-model="userData.instagram"
+      label="Instagram"
+      clearable
+    ></v-text-field>
+
+    <v-text-field
+      class="my-2"
+      prepend-icon="mdi-whatsapp"
+      v-model="userData.phone"
+      label="Telefone"
+      :rules="[(v) => !!v || 'Telefone é um campo obrigatório']"
+      required
+      clearable
+    ></v-text-field>
+
+    <v-textarea
+    prepend-icon="mdi-comment-account"
+      label="Biografia"
+      v-model="userData.desc"
+      auto-grow
+      rows="1"
+      row-height="15"
+      required
+      clearable
+    ></v-textarea>
+
     <v-text-field
       v-model="userData.password"
       class="my-2"
@@ -47,6 +88,9 @@
         <p class="font-weight-medium text-left">
           Escolha 3 matérias do seu interesse:
         </p>
+        <p class="grey--text caption text-left">
+          Essas matérias aparecerão no seu perfil, para que as outras pessoas saibam os seus interesses.
+        </p>
         <v-chip-group active-class="primary" multiple>
           <v-chip
             v-for="subject in $store.state.user.subjects"
@@ -58,7 +102,7 @@
           >
         </v-chip-group>
       </v-col>
-      <v-col cols="12">
+      <v-col cols="12" class="mb-5">
         <v-btn @click="register" block color="primary" class="my-3">
           <span v-if="!loading"> Registrar </span>
           <v-progress-circular
@@ -92,6 +136,7 @@ export default Vue.extend({
   data() {
     return {
       passwordShow: false,
+      selectTurma: null,
       valid: false,
       loading: false,
       error: false,
@@ -101,7 +146,11 @@ export default Vue.extend({
         password: "",
         passwordConfirm: "",
         name: "",
+        phone: "",
+        instagram: "",
+        desc: "",
       },
+      turmas: ["IA18", "CA18", "THa18", "THB18"],
       ids: [],
       materias: {},
       loginRules: [
@@ -130,9 +179,7 @@ export default Vue.extend({
     select(subject) {
       let ocurrences = this.ids.find((el) => el.id == subject.id);
       if (ocurrences !== undefined) {
-        this.ids = this.ids.filter(
-          (el) => el.id != subject.id
-        );
+        this.ids = this.ids.filter((el) => el.id != subject.id);
       } else {
         this.ids.push(subject);
       }
@@ -150,9 +197,13 @@ export default Vue.extend({
           const ids = this.ids.map((el) => el.id);
 
           const registerRequest = new RegisterRequest(
-            this.userData.login,
-            this.userData.password,
             this.userData.name,
+            this.userData.login,
+            this.selectTurma,
+            this.userData.instagram,
+            this.userData.phone,
+            this.userData.desc,
+            this.userData.password,
             ids
           );
 
@@ -168,10 +219,14 @@ export default Vue.extend({
 
           this.$store.dispatch("triggerSetUser", meResponse.data.aluno);
 
-          await this.$store.dispatch("loadSubjects", this.$store.state.user.token)
-          await this.$store.dispatch("loadUsers", this.$store.state.user.token)
+          await this.$store.dispatch(
+            "loadSubjects",
+            this.$store.state.user.token
+          );
+          await this.$store.dispatch("loadUsers", this.$store.state.user.token);
+          await this.$store.dispatch("loadMatchs", this.$store.state.user.token);
 
-          this.$store.commit("saveUser")
+          this.$store.commit("saveUser");
           this.$router.push("/explore");
         } else {
           this.errorMessage = "Campos inválidos.";
