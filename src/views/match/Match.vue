@@ -42,6 +42,7 @@
 
 <script>
 import Vue from "vue";
+import url from "./../../config/config.json"
 
 export default Vue.extend({
   data() {
@@ -57,7 +58,7 @@ export default Vue.extend({
   methods: {
     setProfilePicture(foto) {
       console.log(foto)
-      return foto ? `http://localhost:777/uploads/${foto}` : "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
+      return foto ? `${url.API_URL}/uploads/${foto}` : "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
     },
     async loadMatchs() {
       await this.$store.dispatch("loadMatchs", this.$store.state.user.token);

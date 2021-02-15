@@ -31,6 +31,7 @@
 
 <script>
 import Vue from 'vue'
+import url from './../config/config.json'
 
 export default Vue.extend({
   data() {
@@ -49,7 +50,7 @@ export default Vue.extend({
       this.$router.push(page)
     },
     setProfilePicture() {
-      return `http://localhost:777/uploads/${this.$store.state.user.foto}` ?? "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
+      return `${url.API_URL}/uploads/${this.$store.state.user.foto}` ?? "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
     },
     logout() {
       localStorage.removeItem('user')

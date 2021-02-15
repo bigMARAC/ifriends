@@ -161,7 +161,11 @@ export default Vue.extend({
         desc: "",
         foto: null,
       },
-      turmas: ["IA18", "CA18", "THa18", "THB18"],
+      turmas: [
+        "IA18", "CA18", "THA18", "THB18", "AGRO18",
+        "IA19", "CA19", "THA19", "THB19", "AGRO19",
+        "IA20", "CA20", "THA20", "THB20", "AGRO20"
+        ],
       ids: [],
       materias: {},
       loginRules: [

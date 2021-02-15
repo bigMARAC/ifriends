@@ -48,6 +48,7 @@
 import Vue from "vue";
 import UpdateUserRequest from "./../../requests/UpdateUserRequest.js";
 import MeRequest from "./../../requests/MeRequest.js";
+import url from './../../config/config.json'
 
 export default Vue.extend({
   data() {
@@ -61,7 +62,7 @@ export default Vue.extend({
   methods: {
     setProfilePicture() {
       return (
-        `http://localhost:777/uploads/${this.$store.state.user.foto}` ??
+        `${url.API_URL}/uploads/${this.$store.state.user.foto}` ??
         "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
       );
     },

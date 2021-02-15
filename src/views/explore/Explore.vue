@@ -69,6 +69,7 @@
 import Vue from "vue";
 import MatchRequest from "./../../requests/MatchRequest";
 import MatchOverlay from "./MatchOverlay.vue";
+import url from "./../../config/config.json"
 
 export default Vue.extend({
   data() {
@@ -78,12 +79,7 @@ export default Vue.extend({
         match: false,
         empty: true,
       },
-      userIndex: 0,
-      p: [
-        {
-          img: "https://i.redd.it/2t96qnhl65p51.jpg",
-        },
-      ],
+      userIndex: 0
     };
   },
   mounted() {
@@ -91,8 +87,8 @@ export default Vue.extend({
   },
   methods: {
     setProfilePicture(){
-      const url = `http://localhost:777/uploads/${this.$store.state.user.users[this.userIndex].foto}`
-      return url ?? "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
+      const link = `${url.API_URL}/uploads/${this.$store.state.user.users[this.userIndex].foto}`
+      return link ?? "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
     },
     nextUser() {
       this.overlays.match = false
