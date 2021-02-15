@@ -10,7 +10,7 @@
     <v-divider></v-divider>
 
     <v-row justify="center" class="py-4">
-      <v-img :src="setProfilePicture()" max-width="100"></v-img>
+      <v-img :src="setProfilePicture()" max-width="100" max-height="100" class="rounded-circle"></v-img>
     </v-row>
 
     <v-divider></v-divider>
@@ -49,7 +49,7 @@ export default Vue.extend({
       this.$router.push(page)
     },
     setProfilePicture() {
-      return this.$store.state.user.foto ?? "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
+      return `http://localhost:777/uploads/${this.$store.state.user.foto}` ?? "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"
     },
     logout() {
       localStorage.removeItem('user')
