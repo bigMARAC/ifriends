@@ -21,6 +21,14 @@
       :counter="10"
     ></v-text-field>
 
+    <v-file-input
+      v-model="userData.foto"
+      prepend-icon="mdi-camera"
+      accept="image/jpg, image/jpeg, image/png, image/gif"
+      label="Foto de Perfil"
+      chips
+    ></v-file-input>
+
     <v-select
       class="my-2"
       prepend-icon="mdi-book"
@@ -50,7 +58,7 @@
     ></v-text-field>
 
     <v-textarea
-    prepend-icon="mdi-comment-account"
+      prepend-icon="mdi-comment-account"
       label="Biografia"
       v-model="userData.desc"
       auto-grow
@@ -89,7 +97,8 @@
           Escolha 3 matérias do seu interesse:
         </p>
         <p class="grey--text caption text-left">
-          Essas matérias aparecerão no seu perfil, para que as outras pessoas saibam os seus interesses.
+          Essas matérias aparecerão no seu perfil, para que as outras pessoas
+          saibam os seus interesses.
         </p>
         <v-chip-group active-class="primary" multiple>
           <v-chip
@@ -131,6 +140,7 @@
 import Vue from "vue";
 import RegisterRequest from "./../../requests/RegisterRequest";
 import MeRequest from "./../../requests/MeRequest";
+import PictureRequest from "./../../requests/PictureRequest"
 
 export default Vue.extend({
   data() {
@@ -149,6 +159,7 @@ export default Vue.extend({
         phone: "",
         instagram: "",
         desc: "",
+        foto: null,
       },
       turmas: ["IA18", "CA18", "THa18", "THB18"],
       ids: [],
@@ -207,6 +218,7 @@ export default Vue.extend({
             ids
           );
 
+
           const registerResponse = await registerRequest.send();
 
           this.$store.dispatch(
@@ -215,16 +227,26 @@ export default Vue.extend({
           );
 
           const meRequest = new MeRequest(this.$store.state.user.token);
-          const meResponse = await meRequest.send();
+          await meRequest.send();
 
-          this.$store.dispatch("triggerSetUser", meResponse.data.aluno);
+          const pictureRequest = new PictureRequest(
+            this.$store.state.user.token,
+            this.userData.foto
+          )
+
+          const fotoResponse = await pictureRequest.send()
+
+          this.$store.dispatch("triggerSetUser", fotoResponse.data.aluno);
 
           await this.$store.dispatch(
             "loadSubjects",
             this.$store.state.user.token
           );
           await this.$store.dispatch("loadUsers", this.$store.state.user.token);
-          await this.$store.dispatch("loadMatchs", this.$store.state.user.token);
+          await this.$store.dispatch(
+            "loadMatchs",
+            this.$store.state.user.token
+          );
 
           this.$store.commit("saveUser");
           this.$router.push("/explore");
