@@ -140,7 +140,7 @@
 import Vue from "vue";
 import RegisterRequest from "./../../requests/RegisterRequest";
 import MeRequest from "./../../requests/MeRequest";
-import PictureRequest from "./../../requests/PictureRequest"
+import PictureRequest from "./../../requests/PictureRequest";
 
 export default Vue.extend({
   data() {
@@ -162,10 +162,22 @@ export default Vue.extend({
         foto: null,
       },
       turmas: [
-        "IA18", "CA18", "THA18", "THB18", "AGRO18",
-        "IA19", "CA19", "THA19", "THB19", "AGRO19",
-        "IA20", "CA20", "THA20", "THB20", "AGRO20"
-        ],
+        "IA18",
+        "CA18",
+        "THA18",
+        "THB18",
+        "AGRO18",
+        "IA19",
+        "CA19",
+        "THA19",
+        "THB19",
+        "AGRO19",
+        "IA20",
+        "CA20",
+        "THA20",
+        "THB20",
+        "AGRO20",
+      ],
       ids: [],
       materias: {},
       loginRules: [
@@ -222,7 +234,6 @@ export default Vue.extend({
             ids
           );
 
-
           const registerResponse = await registerRequest.send();
 
           this.$store.dispatch(
@@ -231,16 +242,20 @@ export default Vue.extend({
           );
 
           const meRequest = new MeRequest(this.$store.state.user.token);
-          await meRequest.send();
+          const meResponse = await meRequest.send();
 
-          const pictureRequest = new PictureRequest(
-            this.$store.state.user.token,
-            this.userData.foto
-          )
+          this.$store.dispatch("triggerSetUser", meResponse.data.aluno);
 
-          const fotoResponse = await pictureRequest.send()
+          console.log(this.userData.foto);
 
-          this.$store.dispatch("triggerSetUser", fotoResponse.data.aluno);
+          if (this.userData.foto) {
+            const pictureRequest = new PictureRequest(
+              this.$store.state.user.token,
+              this.userData.foto
+            );
+
+            await pictureRequest.send();
+          }
 
           await this.$store.dispatch(
             "loadSubjects",
