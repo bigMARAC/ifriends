@@ -246,8 +246,6 @@ export default Vue.extend({
 
           this.$store.dispatch("triggerSetUser", meResponse.data.aluno);
 
-          console.log(this.userData.foto);
-
           if (this.userData.foto) {
             const pictureRequest = new PictureRequest(
               this.$store.state.user.token,

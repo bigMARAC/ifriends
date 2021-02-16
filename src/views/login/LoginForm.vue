@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import Vue from "vue"
-import LoginRequest from "./../../requests/LoginRequest.js"
-import MeRequest from "./../../requests/MeRequest.js"
+import Vue from "vue";
+import LoginRequest from "./../../requests/LoginRequest.js";
+import MeRequest from "./../../requests/MeRequest.js";
 
 export default Vue.extend({
   data() {
@@ -81,42 +81,49 @@ export default Vue.extend({
         (password) =>
           password.length >= 8 || "A senha precisa possuir 8 caracteres",
       ],
-    }
+    };
   },
   methods: {
     async login() {
       try {
         if (this.$refs.login_form.validate()) {
-          this.loading = true
+          this.loading = true;
 
           const loginRequest = new LoginRequest(
             this.userData.login,
             this.userData.password
-          )
-          const loginResponse = await loginRequest.send()
+          );
+          const loginResponse = await loginRequest.send();
 
-          this.$store.dispatch("triggerSetToken", loginResponse.data.token)
-          
-          const meRequest = new MeRequest(this.$store.state.user.token)
-          const meResponse = await meRequest.send()
+          this.$store.dispatch("triggerSetToken", loginResponse.data.token);
 
-          this.$store.dispatch("triggerSetUser", meResponse.data.aluno)
+          const meRequest = new MeRequest(this.$store.state.user.token);
+          const meResponse = await meRequest.send();
 
-          await this.$store.dispatch("loadSubjects", this.$store.state.user.token)
-          await this.$store.dispatch("loadUsers", this.$store.state.user.token)
+          this.$store.dispatch("triggerSetUser", meResponse.data.aluno);
 
-          this.$store.commit("saveUser")
-          this.$router.push("/explore")
+          await this.$store.dispatch(
+            "loadSubjects",
+            this.$store.state.user.token
+          );
+          await this.$store.dispatch("loadUsers", this.$store.state.user.token);
+          await this.$store.dispatch(
+            "loadMatchs",
+            this.$store.state.user.token
+          );
+
+          this.$store.commit("saveUser");
+          this.$router.push("/explore");
         } else {
-          this.errorMessage = "Campos inválidos."
-          this.error = true
+          this.errorMessage = "Campos inválidos.";
+          this.error = true;
         }
       } catch (error) {
-        this.errorMessage = error.response.data.erro
-        this.error = true
-        this.loading = false
+        this.errorMessage = error.response.data.erro;
+        this.error = true;
+        this.loading = false;
       }
     },
   },
-})
+});
 </script>
