@@ -1,4 +1,4 @@
-# API IFriends 2.0
+# IFriends
 ![Badge](https://img.shields.io/badge/MaracTech-IFriends-blueviolet)
 ![Badge](https://img.shields.io/badge/license-MIT-brightgreen)
 
@@ -21,7 +21,7 @@ npm run serve
 ```
 
 ## Requisitos
-- [API-IFriends](https://github.com/bigMARAC/API-IFriends-2.0)
+- [API IFriends](https://github.com/bigMARAC/API-IFriends-2.0)
 
 ### Features
 
