@@ -32,6 +32,7 @@ npm run serve
 - [x] Opção de logout
 
 ### To-Do
-- [ ] Atualizar Foto de Perfil
-- [ ] Atualizar Senha
+- [ ] Atualizar foto de perfil
+- [ ] Atualizar senha
 - [ ] Chat
+- [ ] Exibir uma cor diferente pra cada matéria
